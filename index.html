@@ -80,8 +80,12 @@
             max-width: 350px;
             min-width: 350px;
             font-size: 45px;
-            word-wrap: break-word;
+            word-wrap: normal;
             cursor: pointer;
+        }
+
+        #title {
+            word-wrap: normal;
         }
 
         .color-box {
@@ -94,6 +98,7 @@
         .form {
             display: none;
             margin-top: 10px;
+            font-size: 20px;
         }
 
         .form input {
@@ -111,12 +116,20 @@
             margin-left: 20px;
             cursor: pointer;
         }
+
+        #banner {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
     </style>
 </head>
 
 <body>
     <div id="header">
         <img id="logo" src="logo.png" alt="Logo" onclick="toggleForm()" />
+        <div id="title">Clash of Kings and Queens</div>
         <div id="timer">15:00</div>
 
     </div>
@@ -143,12 +156,19 @@
             <input type="text" id="teamName-5" placeholder="Team Name" />
         </div>
         <div>
+            <label for="timervalue">Timer Minutes</label>
             <input type="text" id="timervalue" value="15" placeholder="Timer minutes" />
+        </div>
+        <div>
+            <label for="titlevalue">Title</label>
+            <input type="text" id="titlevalue" placeholder="Title value" />
         </div>
         <button onclick="submitForm()">Submit</button>
     </div>
     <div id="scoreboard"></div>
     <div class="indicator" id="indicator">🛑</div>
+    <img id="banner" src="banneri.png" alt="Logo">
+
 
 
 
@@ -186,6 +206,11 @@
             timerElement.addEventListener('click', function () {
                 toggleTimer();
             });
+
+            titleElement = document.getElementById('title')
+            if (document.getElementById('titlevalue').value.trim() !== '') {
+                titleElement.textContent = document.getElementById('titlevalue').value
+            }
         }
 
         // Function to update the scoreboard
