@@ -131,7 +131,7 @@
     <div id="header">
         <img id="logo" src="logo.png" alt="Logo" onclick="toggleForm()" />
         <div id="title">Clash of Kings and Queens</div>
-        <div id="timer">15:00</div>
+        <div onclick="toggleTimer()" id="timer">15:00</div>
 
     </div>
 
@@ -204,9 +204,6 @@
             timerValue = document.getElementById('timervalue').value * 60
             timerElement = document.getElementById('timer')
             timerElement.textContent = document.getElementById('timervalue').value + ':00';
-            timerElement.addEventListener('click', function () {
-                toggleTimer();
-            });
 
             if (timerRunning) {
                 toggleTimer()
@@ -266,7 +263,6 @@
         }
 
         function incrementScore(index) {
-            console.log(index)
             var scoreNumber = document.getElementById('score' + index);
             var score = parseInt(scoreNumber.textContent);
             scoreNumber.textContent = score + 1;
@@ -290,6 +286,7 @@
         }
 
         function toggleTimer() {
+            console.log("Toggling timer to " + !timerRunning)
             if (timerRunning) {
                 var indicator = document.getElementById('indicator');
                 indicator.textContent = '🛑';
