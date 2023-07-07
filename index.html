@@ -207,6 +207,10 @@
                 toggleTimer();
             });
 
+            if (timerRunning) {
+                toggleTimer()
+            }
+
             titleElement = document.getElementById('title')
             if (document.getElementById('titlevalue').value.trim() !== '') {
                 titleElement.textContent = document.getElementById('titlevalue').value
