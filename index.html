@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>King of the Court Scoreboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 48px;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        .indicator {
+            position: fixed;
+            top: 0;
+            right: 40px;
+            width: 20px;
+            height: 20px;
+        }
+
+        #header {
+            height: 25vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            padding-right: 0px;
+            box-sizing: border-box;
+        }
+
+        #logo {
+            height: 100%;
+            width: 45vh;
+            cursor: pointer;
+        }
+
+        #timer {
+            height: 100%;
+            width: 25%;
+            font-size: 140px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        #scoreboard {
+            height: 75vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .score-number {
+            font-weight: bold;
+            margin-left: 10px;
+            text-align: left;
+            width: 50px;
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .team-name {
+            font-weight: bold;
+            margin-left: 10px;
+            text-align: left;
+            max-width: 350px;
+            min-width: 350px;
+            font-size: 45px;
+            word-wrap: break-word;
+            cursor: pointer;
+        }
+
+        .color-box {
+            height: 100px;
+            width: 100px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .form {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .form input {
+            margin-bottom: 10px;
+        }
+
+        .form-submit {
+            margin-top: 10px;
+        }
+
+        .score-bar {
+            height: 50px;
+            width: 0;
+            transition: width 0.3s ease;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <img id="logo" src="logo.png" alt="Logo" onclick="toggleForm()" />
+        <div id="timer">15:00</div>
+
+    </div>
+
+    <div class="form" id="form">
+        <div>
+            <input type="color" id="colorPicker-1" value="#ff0000" />
+            <input type="text" id="teamName-1" placeholder="Team Name" />
+        </div>
+        <div>
+            <input type="color" id="colorPicker-2" value="#ffff00" />
+            <input type="text" id="teamName-2" placeholder="Team Name" />
+        </div>
+        <div>
+            <input type="color" id="colorPicker-3" value="#00ff00" />
+            <input type="text" id="teamName-3" placeholder="Team Name" />
+        </div>
+        <div>
+            <input type="color" id="colorPicker-4" value="#ffffff" />
+            <input type="text" id="teamName-4" placeholder="Team Name" />
+        </div>
+        <div>
+            <input type="color" id="colorPicker-5" value="#0000ff" />
+            <input type="text" id="teamName-5" placeholder="Team Name" />
+        </div>
+        <div>
+            <input type="text" id="timervalue" value="15" placeholder="Timer minutes" />
+        </div>
+        <button onclick="submitForm()">Submit</button>
+    </div>
+    <div id="scoreboard"></div>
+    <div class="indicator" id="indicator">🛑</div>
+
+
+
+
+    <script>
+        var teams = []; // Array to store team information
+        var formVisible = false;
+        var timerRunning = false;
+        var timerValue = 15 * 60;
+
+        // Function to toggle the form's visibility
+        function toggleForm() {
+            var form = document.getElementById('form');
+            formVisible = !formVisible;
+            form.style.display = formVisible ? 'block' : 'none';
+        }
+
+        // Function to handle form submission
+        function submitForm() {
+            var teams = [];
+            for (var i = 1; i <= 5; i++) {
+                var colorPicker = document.getElementById('colorPicker-' + i);
+                var teamNameInput = document.getElementById('teamName-' + i);
+                var color = colorPicker.value;
+                var teamName = teamNameInput.value;
+                if (teamName.trim() !== '') {
+                    teams.push({ name: teamName, color: color, teamnumber: i });
+                }
+            }
+            toggleForm();
+            updateScoreboard(teams);
+            timerValue = document.getElementById('timervalue').value * 60
+            timerElement = document.getElementById('timer')
+            timerElement.textContent = document.getElementById('timervalue').value + ':00';
+            timerElement.addEventListener('click', function () {
+                toggleTimer();
+            });
+        }
+
+        // Function to update the scoreboard
+        function updateScoreboard(teams) {
+            var scoreboard = document.getElementById('scoreboard');
+            scoreboard.innerHTML = '';
+
+            teams.forEach(function (team) {
+                console.log(team.teamName)
+                var teamElement = document.createElement('div');
+                teamElement.classList.add('team');
+
+                var colorBox = document.createElement('div');
+                colorBox.classList.add('color-box');
+                colorBox.style.backgroundColor = team.color;
+                colorBox.addEventListener('click', function () {
+                    incrementScore(team.teamnumber);
+                });
+
+                var teamName = document.createElement('div');
+                teamName.classList.add('team-name');
+                teamName.textContent = team.name;
+                teamName.addEventListener('click', function () {
+                    incrementScore(team.teamnumber);
+                });
+
+                var scoreNumber = document.createElement('div');
+                scoreNumber.classList.add('score-number');
+                scoreNumber.textContent = '0';
+                scoreNumber.id = 'score' + team.teamnumber;
+
+                var scoreBar = document.createElement('div');
+                scoreBar.classList.add('score-bar');
+                scoreBar.style.backgroundColor = team.color;
+                scoreBar.id = 'bar' + team.teamnumber;
+                scoreBar.addEventListener('click', function () {
+                    removeScore(team.teamnumber);
+                });
+
+
+                teamElement.appendChild(colorBox);
+                teamElement.appendChild(teamName);
+                teamElement.appendChild(scoreNumber);
+                teamElement.appendChild(scoreBar);
+                scoreboard.appendChild(teamElement);
+
+            });
+        }
+
+        function incrementScore(index) {
+            console.log(index)
+            var scoreNumber = document.getElementById('score' + index);
+            var score = parseInt(scoreNumber.textContent);
+            scoreNumber.textContent = score + 1;
+            var scoreBar = document.getElementById('bar' + index);
+            var maxWidth = window.innerWidth * 0.75; // Maximum width of the score bar
+            var newWidth = (score + 1) * (maxWidth / 25); // Calculate the new width based on the score
+            scoreBar.style.width = newWidth + 'px';
+
+        }
+
+
+        function removeScore(index) {
+            console.log(index)
+            var scoreNumber = document.getElementById('score' + index);
+            var score = parseInt(scoreNumber.textContent);
+            scoreNumber.textContent = score - 1;
+            var scoreBar = document.getElementById('bar' + index);
+            var maxWidth = window.innerWidth * 0.75; // Maximum width of the score bar
+            var newWidth = (score - 1) * (maxWidth / 25); // Calculate the new width based on the score
+            scoreBar.style.width = newWidth + 'px';
+        }
+
+        function toggleTimer() {
+            if (timerRunning) {
+                var indicator = document.getElementById('indicator');
+                indicator.textContent = '🛑';
+                clearInterval(timerInterval);
+            } else {
+                timerInterval = setInterval(updateTimer, 1000);
+                var indicator = document.getElementById('indicator');
+                indicator.textContent = '🏐';
+            }
+            timerRunning = !timerRunning;
+
+        }
+
+
+        function updateTimer() {
+            var timerDisplay = document.getElementById('timer');
+            var minutes = Math.floor(timerValue / 60);
+            var seconds = timerValue % 60;
+
+            timerDisplay.textContent = `${formatTime(minutes)}:${formatTime(seconds)}`;
+
+            if (timerValue <= 0) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+            } else {
+                timerValue--;
+            }
+        }
+
+        function formatTime(time) {
+            return time.toString().padStart(2, '0');
+        }
+
+
+
+    </script>
+</body>
+
+</html>
