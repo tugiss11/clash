@@ -98,6 +98,7 @@
             width: 100px;
             margin-right: 10px;
             cursor: pointer;
+            caret-color: transparent;
         }
 
         .form {
@@ -120,6 +121,7 @@
             transition: width 0.3s ease;
             margin-left: 20px;
             cursor: pointer;
+            caret-color: transparent;
         }
 
         #banner {
@@ -127,6 +129,24 @@
             bottom: 0;
             left: 0;
             width: 100%;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .clicked {
+            animation: pulse 0.4s;
         }
     </style>
 </head>
@@ -162,7 +182,7 @@
         </div>
         <div>
             <label for="timervalue">Timer Minutes</label>
-            <input type="text" id="timervalue" value="15" placeholder="Timer minutes" />
+            <input type="number" id="timervalue" min="1" max="9999" value="15" placeholder="Timer minutes" />
         </div>
         <div>
             <label for="titlevalue">Title</label>
@@ -239,7 +259,7 @@
                 var teamName = document.createElement('div');
                 teamName.classList.add('team-name');
                 teamName.textContent = team.name;
-                teamName.addEventListener('click', function () {
+                teamName.addEventListener('click', function (event) {
                     incrementScore(team.teamnumber);
                 });
 
@@ -274,6 +294,13 @@
             var maxWidth = window.innerWidth * 0.75; // Maximum width of the score bar
             var newWidth = (score + 1) * (maxWidth / 25); // Calculate the new width based on the score
             scoreBar.style.width = newWidth + 'px';
+
+
+            var teamName = event.currentTarget;
+            teamName.classList.add('clicked');
+            setTimeout(function () {
+                teamName.classList.remove('clicked');
+            }, 500);
 
         }
 
