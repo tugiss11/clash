@@ -17,7 +17,7 @@ The "King of the Court Scoreboard" page offers the following features:
 
 To use the "King of the Court Scoreboard", follow these steps:
 
-1. Open the HTML file (`[index.html](https://tugiss11.github.io/clash/)`) in a web browser.
+1. Open the HTML file ([index.html](https://tugiss11.github.io/clash/)) in a web browser.
 2. The default configuration includes five teams with preset colors. You can modify the team names and colors using the form that appears when you click the logo in the header.
 3. To increment the score for a team, click on the team name or the colored bar associated with the team.
 4. To decrement the score for a team, click on the colored bar associated with the team.
